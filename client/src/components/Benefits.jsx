@@ -1,72 +1,83 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { FaCheckCircle } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import './Benefits.css';
 
-const benefits = [
-  "Get custom next steps for your goals.",
-  "Follow clear, structured action plans.",
-  "See urgency and deadlines instantly."
-];
-
-export default function Benefits() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { staggerChildren: 0.15 } 
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-  };
+const BenefitItem = ({ tag, title, description, icon: Icon, index }) => {
+  const isEven = index % 2 === 0;
 
   return (
-    <section className="py-24 bg-white text-primary">
-      <div className="w-full max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
-          <motion.div 
-            className="order-2 lg:order-0"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <ul className="list-none p-0 flex flex-col gap-6 lg:gap-8 m-0 py-8 lg:py-12">
-              {benefits.map((text, idx) => (
-                <motion.li key={idx} variants={itemVariants} className="border-b border-black/10 pb-6 lg:pb-8 last:border-0 last:pb-0">
-                  <div className="flex items-start gap-4">
-                    <div className="text-primary mt-1 shrink-0">
-                      <FaCheckCircle size={24} />
-                    </div>
-                    <p className="text-lg lg:text-xl font-medium">{text}</p>
-                  </div>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+    <div className="benefit-item">
+      <motion.div 
+        className="benefit-content"
+        initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <span className="benefit-tag">{tag}</span>
+        <h3 className="benefit-title">{title}</h3>
+        <p className="benefit-description">{description}</p>
+      </motion.div>
 
-          <motion.div 
-            className="w-full order-1 lg:order-1"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="relative w-full pt-[66.66%] rounded-[24px] overflow-hidden shadow-xl">
-              <img 
-                src="https://cdn.prod.website-files.com/69c6b85da80e50c8474e5a23/69c6c11805ff3a0be9b39b64_Wooden_sign_board_202603272309.jpeg" 
-                loading="lazy" 
-                alt="Wooden sign board" 
-                className="absolute inset-0 w-full h-full object-cover rounded-[24px]"
-              />
-            </div>
-          </motion.div>
-          
+      <motion.div 
+        className="benefit-image-container"
+        initial={{ opacity: 0, scale: 0.9, x: isEven ? 50 : -50 }}
+        whileInView={{ opacity: 1, scale: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="benefit-image-placeholder">
+          {Icon}
+          <p style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.5 }}>Workflow mockup</p>
         </div>
+      </motion.div>
+    </div>
+  );
+};
+
+const Benefits = () => {
+  const benefits = [
+    {
+      tag: "Guided action feed",
+      title: "Focus on what matters most.",
+      description: "Our AI-powered feed filters out the noise and presents you with the most impactful actions you can take right now to stay on track.",
+            icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.2 }}>
+          <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+        </svg>
+      )
+    },
+    {
+      tag: "Intent recognition",
+      title: "Anticipate your next move.",
+      description: "By analyzing your patterns and current context, Flowstate recognizes your intent and prepares the tools you need before you even ask for them.",
+            icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.2 }}>
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+        </svg>
+      )
+    },
+    {
+      tag: "Priority insights",
+      title: "Real-time performance metrics.",
+      description: "Get immediate feedback on your productivity and flow state. Visualize how small changes in your routine lead to massive improvements over time.",
+            icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.2 }}>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      )
+    }
+  ];
+
+  return (
+    <section className="benefits" id="about">
+      <div className="container">
+        {benefits.map((benefit, index) => (
+          <BenefitItem key={index} {...benefit} index={index} />
+        ))}
       </div>
     </section>
   );
-}
+};
+
+export default Benefits;

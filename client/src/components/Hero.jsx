@@ -1,65 +1,102 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import './Hero.css';
 
-export default function Hero() {
+const Hero = () => {
+  const line1 = "Shape habits.";
+  const line2 = "Predict outcomes.";
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
+    }),
+  };
+
+  const child = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
+
+  const textToWords = (text) => text.split(" ").map(word => word + "\u00A0");
+
   return (
-    <header className="py-24 lg:py-32 overflow-hidden bg-inverse text-inverse relative">
-      <div className="w-full max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-12 lg:gap-6 items-start">
-          
-          <motion.div 
-            className="lg:col-start-4 lg:col-end-7 lg:row-start-1 lg:row-end-4 relative order-4 lg:order-none"
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="relative w-full pt-[66.66%] rounded-[24px] overflow-hidden">
-              <img 
-                width="1300" 
-                height="1000" 
-                alt="Dashboard graphic" 
-                src="./photo.png" 
-                className="absolute inset-0 w-full h-full object-cover [mask-image:linear-gradient(to_bottom,transparent,black_15%)]"
-              />
-              <div className="absolute inset-x-0 bottom-0 h-1/2 backdrop-blur-md bg-gradient-to-b from-transparent to-[#151413]/80 [mask-image:linear-gradient(to_top,transparent,black_50%)]"></div>
-            </div>
-          </motion.div>
+    <section className="hero">
+      <div className="hero-glow"></div>
+      <div className="container">
+        <motion.h1 
+          className="hero-title"
+          variants={container}
+          initial="hidden"
+          animate="visible"
+        >
+          {textToWords(line1).map((word, index) => (
+            <motion.span 
+              key={index} 
+              style={{ display: 'inline-block' }} 
+              variants={child}
+            >
+              {word}
+            </motion.span>
+          ))}
+          <br />
+          {textToWords(line2).map((word, index) => (
+            <motion.span 
+              key={index} 
+              style={{ display: 'inline-block' }} 
+              variants={child}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.h1>
 
-          <motion.div 
-            className="lg:col-start-1 lg:col-end-4 lg:row-start-1 relative z-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h1 className="text-[clamp(3rem,6vw,5.5rem)] leading-[1.1] font-medium tracking-tight mb-6 mt-0">
-              Shape habits.<br />Predict outcomes.
-            </h1>
-          </motion.div>
+        <motion.p 
+          className="hero-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
+        >
+          An AI-powered coach that helps you stay in flow, achieve your goals, 
+          and simulate your future based on today's decisions.
+        </motion.p>
 
-          <motion.div 
-            className="lg:col-start-1 lg:col-end-4 lg:row-start-2 mb-6"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="flex flex-wrap gap-4 mt-0">
-              <a href="#" className="inline-flex items-center justify-center px-6 py-3.5 bg-page text-primary rounded-lg font-medium hover:opacity-90 hover:-translate-y-0.5 transition-all">Start free</a>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="lg:col-start-1 lg:col-end-3 lg:row-start-3 pt-4"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <p className="text-xl leading-relaxed text-white/60 max-w-[60ch]">
-              AI-powered workflows tailored to your goals. Enter your interests—get structured, actionable next steps. Progress made simple, with smart predictions and clear priorities.
-            </p>
-          </motion.div>
-
-        </div>
+        <motion.div 
+          className="hero-actions"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 1.8 }}
+        >
+          <button className="btn-primary">Start free</button>
+          <button className="btn-secondary" style={{ 
+            padding: '1rem 2rem', 
+            borderRadius: '9999px',
+            border: '1px solid rgba(0,0,0,0.1)',
+            fontWeight: '500'
+          }}>
+            Watch demo
+          </button>
+        </motion.div>
       </div>
-    </header>
+    </section>
   );
-}
+};
+
+export default Hero;

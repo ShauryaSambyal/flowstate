@@ -1,47 +1,119 @@
-@import "tailwindcss";
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@theme {
-  --color-page: #ece7e0;
-  --color-inverse: #151413;
-  --color-secondary: #ffffff;
+:root {
+  /* Colors */
+  --bg-primary: #ECE7E0;
+  --bg-dark: #000000;
+  --bg-card: #ECE7E0;
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-inverse: #FFFFFF;
+  --text-inverse-secondary: rgba(255, 255, 255, 0.7);
+  --accent: #282D26;
+  --accent-hover: #454E42;
+  --link-color: #3898EC;
   
-  --color-text-base: #151413;
-  --color-text-inverse: #ece7e0;
-  --color-text-muted: rgba(21, 20, 19, 0.6);
-  --color-text-inverse-muted: rgba(236, 231, 224, 0.6);
-
-  --color-primary: #151413;
-  --color-primary-inverse: #ece7e0;
-
-  --font-family-sans: 'Inter', sans-serif;
+  /* Spacing */
+  --section-padding: 8rem;
+  --container-max-width: 1280px;
+  
+  /* Borders & Radius */
+  --radius-card: 0.75rem;
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.1);
+  --border-inverse: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Shadows */
+  --shadow-card: 0 8px 14px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.15);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
+/* Base Resets */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: var(--font-family-sans);
-  background-color: var(--color-page);
-  color: var(--color-text-base);
-  line-height: 1.5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Utilities for gradient masks (still needed for overlays) */
-@utility mask-fade-top {
-  mask-image: linear-gradient(to bottom, transparent, black 15%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%);
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-@utility mask-fade-bottom {
-  mask-image: linear-gradient(to top, transparent, black 50%);
-  -webkit-mask-image: linear-gradient(to top, transparent, black 50%);
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
 }
 
-@utility mask-fade-top-small {
-  mask-image: linear-gradient(to bottom, transparent, black 30%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%);
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Layout Containers */
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: var(--section-padding) 0;
+}
+
+/* Typography Utilities */
+.text-center { text-align: center; }
+.text-inverse { color: var(--text-inverse); }
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--text-inverse);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* Animation Helpers */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
 }

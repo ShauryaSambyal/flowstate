@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -54,7 +54,7 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.verifyOtp = async (req, res) => {
+export const verifyOtp = async (req, res) => {
   try {
     const { username, email, password, otp } = req.body;
     const otpRecord = await OTP.findOne({ email });

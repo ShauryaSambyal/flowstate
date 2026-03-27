@@ -1,110 +1,87 @@
-import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronDown } from 'react-icons/fa';
+import './FAQ.css';
+import { useState } from 'react';
 
-const faqs = [
-  {
-    question: "How does AI understand my input?",
-    answer: "Our system analyzes your input to identify your intent and recommends the best next steps for your workflow."
-  },
-  {
-    question: "What are the main use cases?",
-    answer: "Organize tasks, set priorities, and get personalized suggestions based on your goals and deadlines."
-  },
-  {
-    question: "Is my information kept private?",
-    answer: "Your data is protected with secure protocols and used only to improve your experience."
-  },
-  {
-    question: "Can I try it for free?",
-    answer: "Start free and explore all features before upgrading to a paid plan."
-  }
-];
-
-export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+const FAQItem = ({ question, answer }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="py-24 bg-inverse text-inverse w-full">
-      <div className="w-full max-w-[800px] mx-auto px-6">
+    <div className={`faq-item ${isOpen ? 'active' : ''}`}>
+      <button className="faq-question" onClick={() => setIsOpen(!isOpen)}>
+        <span>{question}</span>
         <motion.div 
-          className="flex flex-col items-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="faq-icon"
         >
-          <h2 className="text-[clamp(2.5rem,5vw,4rem)] leading-[1.1] font-medium tracking-tight mb-4 text-center">YOUR LIFE, SIMULATED!</h2>
-          <div className="text-lg text-white/60 text-center max-w-[60ch] mx-auto">
-            <p>Get answers about AI guidance, workflow, and recommendations.</p>
-          </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
         </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="faq-answer"
+          >
+            <div style={{ paddingBottom: '1.5rem' }}>
+              {answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
-        <div className="flex flex-col">
-          {faqs.map((faq, idx) => (
-            <motion.div 
-              key={idx} 
-              className="w-full relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-            >
-              <div className="border-b border-white/10 overflow-hidden">
-                <button 
-                  className="w-full bg-transparent border-none flex justify-between items-center py-6 text-inverse cursor-pointer text-left focus:outline-none"
-                  onClick={() => toggleAccordion(idx)}
-                >
-                  <div className="text-xl font-medium m-0 pr-4">{faq.question}</div>
-                  <motion.div 
-                    animate={{ rotate: openIndex === idx ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-center justify-center w-6 h-6 shrink-0"
-                  >
-                    <FaChevronDown size={14} />
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {openIndex === idx && (
-                    <motion.div 
-                      className="overflow-hidden"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="pb-6 pr-8">
-                        <div className="text-white/60 text-base leading-relaxed">
-                          <p>{faq.answer}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          ))}
+const FAQ = () => {
+  const faqs = [
+    {
+      question: "What is Flowstate?",
+      answer: "Flowstate is an AI-powered life OS that helps you shape habits, predict outcomes, and stay in a state of high performance through guided intent and real-time guidance."
+    },
+    {
+      question: "How does the intent recognition work?",
+      answer: "Our AI analyzes your historical patterns, calendar, and current context to recognize what you're trying to achieve and proactively suggests the most effective next steps."
+    },
+    {
+      question: "Is my data secure?",
+      answer: "Absolutely. We use end-to-end encryption for all personal data. Your progress and inputs are yours alone and are never sold or used for external training without explicit consent."
+    },
+    {
+      question: "Can I use it for my team?",
+      answer: "Yes, Flowstate has a multi-user workspace feature that allows teams to align their collective intent while maintaining individual flow states."
+    }
+  ];
+
+  return (
+    <section className="faq" id="support">
+      <div className="container">
+        <div className="faq-header">
+          <motion.h2 
+            className="faq-title"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            Got Questions?
+          </motion.h2>
+          <p style={{ color: 'var(--text-secondary)' }}>Everything you need to know about the Flowstate platform.</p>
         </div>
 
-        <motion.div 
-          className="flex flex-col items-center mt-16 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div className="text-lg text-white/60 mb-6">
-            <p>Need more help? Reach out to our support team.</p>
-          </div>
-          <div>
-            <a href="#" className="inline-flex items-center justify-center px-6 py-3.5 bg-transparent border-2 border-white/20 text-inverse rounded-lg font-medium hover:bg-white/5 transition-all">Support</a>
-          </div>
-        </motion.div>
+        <div className="faq-container">
+          {faqs.map((faq, index) => (
+            <FAQItem key={index} {...faq} />
+          ))}
+        </div>
       </div>
     </section>
   );
-}
+};
+
+export default FAQ;
