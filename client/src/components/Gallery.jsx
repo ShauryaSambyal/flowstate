@@ -7,8 +7,8 @@ const Gallery = () => {
     { title: "Personal Life", tag: "Strategy", image: "/Empty_chair_in_202603272305.jpeg" },
     { title: "Productivity", tag: "Action", image: "/Deadlines_in_phone_202603272312.jpeg" },
     { title: "Health & Fitness", tag: "Balance", image: "/Guided_action_feed_202603272321.jpeg" },
-    { title: "Career Growth", tag: "Vision", image: "/AI_named_FLOWSTATE_202603272251.jpeg" },
-    { title: "Financial Freedom", tag: "Security", image: "/create_a_screen_202603272250.png" },
+    { title: "Career Growth", tag: "Vision", image: "/Career_growth_realistic_202603280954.jpeg" },
+    { title: "Financial Freedom", tag: "Security", image: "/Financial_freedom_comedic_202603280956.jpeg" },
     { title: "Deep Work", tag: "Focus", image: "/download.png" }
   ];
 
