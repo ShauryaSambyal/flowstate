@@ -1,5 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import { signInWithGoogle } from '../../firebase.js';
 import './Hero.css';
 
 const Hero = () => {
@@ -84,15 +84,7 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 1.8 }}
         >
-          <button className="btn-primary">Start free</button>
-          <button className="btn-secondary" style={{ 
-            padding: '1rem 2rem', 
-            borderRadius: '9999px',
-            border: '1px solid rgba(0,0,0,0.1)',
-            fontWeight: '500'
-          }}>
-            Watch demo
-          </button>
+          <button className="btn-primary" onClick={signInWithGoogle}>Start free</button>
         </motion.div>
       </div>
     </section>

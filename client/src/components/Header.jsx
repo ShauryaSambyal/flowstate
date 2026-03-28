@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { signInWithGoogle } from '../../firebase.js';
 import './Header.css';
 
 const Header = () => {
@@ -47,7 +48,7 @@ const Header = () => {
                 <a href={`#${item.title.toLowerCase()}`} className="nav-link">
                   {item.title}
                   {item.hasDropdown && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="m6 9 6 6 6-6"/>
                     </svg>
                   )}
@@ -63,17 +64,17 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <button className="btn-primary">Start free</button>
+          <button className="btn-primary" onClick={signInWithGoogle}>Start free</button>
           <button 
             className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
               </svg>
             )}
@@ -114,7 +115,16 @@ const Header = () => {
                 </li>
               ))}
               <li>
-                <button className="btn-primary" style={{ width: '100%' }}>Start free</button>
+                <button 
+                  className="btn-primary" 
+                  style={{ width: '100%' }}
+                  onClick={() => {
+                    signInWithGoogle();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Start free
+                </button>
               </li>
             </ul>
           </motion.div>

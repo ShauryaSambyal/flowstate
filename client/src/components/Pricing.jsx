@@ -1,5 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import { signInWithGoogle } from '../../firebase.js';
 import './Pricing.css';
 
 const Pricing = () => {
@@ -66,11 +66,11 @@ const Pricing = () => {
               
               <div style={{ marginTop: 'auto' }}>
                 {plan.isPrimary ? (
-                  <button className="btn-primary" style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
+                  <button className="btn-primary" style={{ backgroundColor: '#FFFFFF', color: '#000000' }} onClick={signInWithGoogle}>
                     {plan.buttonText}
                   </button>
                 ) : (
-                  <button className="btn-secondary">
+                  <button className="btn-secondary" onClick={signInWithGoogle}>
                     {plan.buttonText}
                   </button>
                 )}
