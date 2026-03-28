@@ -112,105 +112,154 @@
   border-radius: 50%;
 }
 
-.suggestions-section {
+.output-section {
   width: 100%;
   text-align: left;
+  margin-top: 2rem;
 }
 
-.suggestions-list {
+.guidance-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 4rem;
 }
 
-.error-message {
-  color: #E53E3E;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-weight: 500;
+.section-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.suggestion-item {
+/* Roadmap Styles */
+.roadmap-timeline {
   display: flex;
-  gap: 1.25rem;
-  padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  border-radius: var(--radius-card);
-  border: var(--border-subtle);
-  transition: transform 0.3s ease;
+  flex-direction: column;
 }
 
-.suggestion-item:hover {
-  transform: translateY(-2px);
+.roadmap-step {
+  display: flex;
+  gap: 2rem;
+  min-height: 100px;
 }
 
-.suggestion-bullet {
-  flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+}
+
+.step-dot {
+  width: 16px;
+  height: 16px;
   background-color: var(--accent);
-  margin-top: 0.5rem;
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--accent);
+  z-index: 2;
 }
 
-.suggestion-item p {
-  font-size: 1.125rem;
+.step-line {
+  flex: 1;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  margin: 4px 0;
+}
+
+.step-content {
+  padding-bottom: 3rem;
+}
+
+.step-content h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
   color: var(--text-primary);
-  line-height: 1.5;
+  font-weight: 600;
 }
 
-.loading-placeholder {
-  display: flex;
-  flex-direction: column;
+.step-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+/* Impact Styles */
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
-.skeleton {
-  height: 80px;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.03) 75%);
+.impact-card {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
+  transition: all 0.3s ease;
+}
+
+.impact-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.impact-time {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.impact-desc {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Skeleton Enhancements */
+.skeleton-label {
+  width: 150px;
+  height: 20px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+.skeleton-step {
+  height: 100px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.03) 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
-  border-radius: var(--radius-card);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
 }
 
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.skeleton-impact-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-/* BG Decorations */
-.bg-decorations {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
+.skeleton-card {
+  height: 150px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 2rem;
+  animation: loading 1.5s infinite;
 }
 
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
-}
-
-.blob-1 {
-  top: -100px;
-  right: -100px;
-  width: 400px;
-  height: 400px;
-  background-color: #E2DDD5;
-}
-
-.blob-2 {
-  bottom: -150px;
-  left: -150px;
-  width: 500px;
-  height: 500px;
-  background-color: rgba(0, 0, 0, 0.03);
+/* BG Decorations Addition */
+.blob-3 {
+  top: 40%;
+  left: 30%;
+  width: 450px;
+  height: 450px;
+  background-color: rgba(128, 90, 213, 0.05);
+  filter: blur(100px);
 }
 
 @media (max-width: 768px) {
@@ -227,5 +276,17 @@
   
   .fetch-btn {
     width: 100%;
+  }
+
+  .autocomplete-dropdown {
+    border-radius: 1rem;
+  }
+
+  .impact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-impact-row {
+    grid-template-columns: 1fr;
   }
 }

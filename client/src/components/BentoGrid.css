@@ -37,7 +37,7 @@
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.03);
@@ -46,6 +46,33 @@
 .bento-card:hover {
   transform: translateY(-5px) scale(1.02);
   box-shadow: var(--shadow-hover);
+}
+
+/* Category Specific Colors */
+.bento-card.next-action { 
+  --card-accent: #059669; /* Emerald */
+  background: linear-gradient(135deg, #EEE9E2 0%, #f0fdf4 100%);
+}
+.bento-card.smart-guidance { 
+  --card-accent: #4f46e5; /* Indigo */
+  background: linear-gradient(135deg, #EEE9E2 0%, #eef2ff 100%);
+}
+.bento-card.life-outcomes { 
+  --card-accent: #d97706; /* Amber */
+  background: linear-gradient(135deg, #EEE9E2 0%, #fffbeb 100%);
+}
+.bento-card.priority-insights { 
+  --card-accent: #e11d48; /* Rose */
+  background: linear-gradient(135deg, #EEE9E2 0%, #fff1f2 100%);
+}
+.bento-card.data-privacy { 
+  --card-accent: #4b5563; /* Gray */
+  background: linear-gradient(135deg, #EEE9E2 0%, #f9fafb 100%);
+}
+
+.bento-card:hover {
+  border-color: var(--card-accent);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 0 20px 0 var(--card-accent);
 }
 
 .bento-inner {
@@ -64,6 +91,13 @@
   justify-content: center;
   margin-bottom: 2rem;
   color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.bento-card:hover .bento-icon {
+  background-color: var(--card-accent);
+  color: #FFFFFF;
+  transform: scale(1.1);
 }
 
 .card-title {

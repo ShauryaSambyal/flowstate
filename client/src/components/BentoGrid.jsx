@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import './BentoGrid.css';
 
 const BentoGrid = () => {
+  const [lifeOutcomes] = useState(() => {
+    const savedData = localStorage.getItem('flowstate_life_outcomes');
+    if (savedData) {
+      try {
+        return JSON.parse(savedData);
+      } catch (e) {
+        console.error("Error parsing life outcomes data", e);
+        return null;
+      }
+    }
+    return null;
+  });
+
   const cards = [
     {
       title: "Tailored next action ranking",
       description: "Our AI prioritizes your tasks based on your current state and long-term goals.",
+      category: "next-action",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
@@ -20,6 +34,7 @@ const BentoGrid = () => {
     {
       title: "Intent-based smart guidance",
       description: "AI-driven nudges to keep you in flow and avoid distractions before they happen.",
+      category: "smart-guidance",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
@@ -31,7 +46,10 @@ const BentoGrid = () => {
     },
     {
       title: "Life outcomes",
-      description: "Simulate how your current habits will impact your future health and career.",
+      description: lifeOutcomes 
+        ? `Based on your goal to "${lifeOutcomes.goal}": in 30 days, ${lifeOutcomes.impact.oneMonth} By 90 days, ${lifeOutcomes.impact.threeMonths}`
+        : "Simulate how your current habits will impact your future health and career.",
+      category: "life-outcomes",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.43Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.43Z"/>
@@ -44,6 +62,7 @@ const BentoGrid = () => {
     {
       title: "Priority insights",
       description: "Deep analytics on where your time goes and how to optimize it.",
+      category: "priority-insights",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -51,19 +70,20 @@ const BentoGrid = () => {
       ),
       size: "card-standard",
       link: "View insights",
-      path: "#"
+      path: "/priority-insights"
     },
     {
       title: "Secure data privacy",
       description: "Your data is encrypted and never shared. You own your flow.",
+      category: "data-privacy",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
         </svg>
       ),
       size: "card-standard",
       link: "Learn how",
-      path: "#"
+      path: "/privacy"
     }
   ];
 
@@ -113,7 +133,7 @@ const BentoGrid = () => {
           {cards.map((card, index) => (
             <motion.div 
               key={index}
-              className={`bento-card ${card.size}`}
+              className={`bento-card ${card.size} ${card.category}`}
               variants={itemVariants}
             >
               <div className="bento-inner">
