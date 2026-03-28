@@ -26,7 +26,7 @@ const signInWithGoogle = async () => {
     const user = result.user;
     
     // Sync with MongoDB backend (Using 8080 as configured in server/.env)
-    const response = await fetch('http://localhost:8080/api/v1/users/google-auth', {
+    const response = await fetch('https://flowstate-tvmf.onrender.com/api/v1/users/google-auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

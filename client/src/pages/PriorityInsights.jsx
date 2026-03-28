@@ -14,7 +14,7 @@ const PriorityInsights = () => {
     const fetchPriorityRoadmap = async () => {
       try {
         setLoading(true);
-        const response = await axios.post('http://localhost:8080/ai/suggestions', { 
+        const response = await axios.post('https://flowstate-tvmf.onrender.com/ai/suggestions', { 
             prompt: "how to effectively spend your day for maximum productivity" 
         });
         

@@ -96,7 +96,7 @@ const SmartGuidance = () => {
     setActiveIndex(-1);
     
     try {
-      const response = await axios.post('http://localhost:8080/ai/suggestions', { prompt: finalPrompt });
+      const response = await axios.post('https://flowstate-tvmf.onrender.com/ai/suggestions', { prompt: finalPrompt });
       if (response.data.success) {
         setGuidanceData(response.data.data);
         // Save to localStorage for Life Outcomes section
