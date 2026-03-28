@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Benefits.css';
 
-const BenefitItem = ({ tag, title, description, icon: Icon, index }) => {
+const BenefitItem = ({ tag, title, description, image, index }) => {
   const isEven = index % 2 === 0;
 
   return (
@@ -26,10 +26,11 @@ const BenefitItem = ({ tag, title, description, icon: Icon, index }) => {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <div className="benefit-image-placeholder">
-          {Icon}
-          <p style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.5 }}>Workflow mockup</p>
-        </div>
+        <img 
+          src={image} 
+          alt={title} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        />
       </motion.div>
     </div>
   );
@@ -41,31 +42,19 @@ const Benefits = () => {
       tag: "Guided action feed",
       title: "Focus on what matters most.",
       description: "Our AI-powered feed filters out the noise and presents you with the most impactful actions you can take right now to stay on track.",
-            icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2 }}>
-          <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
-        </svg>
-      )
+      image: "/Guided_action_feed_202603272321.jpeg"
     },
     {
       tag: "Intent recognition",
       title: "Anticipate your next move.",
       description: "By analyzing your patterns and current context, Flowstate recognizes your intent and prepares the tools you need before you even ask for them.",
-            icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2 }}>
-          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
-        </svg>
-      )
+      image: "/create_a_screen_202603272250.png"
     },
     {
       tag: "Priority insights",
       title: "Real-time performance metrics.",
       description: "Get immediate feedback on your productivity and flow state. Visualize how small changes in your routine lead to massive improvements over time.",
-            icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2 }}>
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-      )
+      image: "/Deadlines_in_phone_202603272312.jpeg"
     }
   ];
 

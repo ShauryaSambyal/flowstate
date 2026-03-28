@@ -3,6 +3,12 @@ import { motion } from 'framer-motion';
 import './ContactForm.css';
 
 const ContactForm = () => {
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    alert("Message sent successfully!");
+    window.location.reload();
+  };
+
   return (
     <section className="contact" id="contact">
       <div className="container">
@@ -31,18 +37,18 @@ const ContactForm = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={handleFormSubmit}>
               <div className="form-group">
                 <label className="form-label" htmlFor="name">Full Name</label>
-                <input className="form-input" type="text" id="name" placeholder="John Doe" />
+                <input className="form-input" type="text" id="name" placeholder="John Doe" required />
               </div>
               <div className="form-group">
                 <label className="form-label" htmlFor="email">Email Address</label>
-                <input className="form-input" type="email" id="email" placeholder="john@example.com" />
+                <input className="form-input" type="email" id="email" placeholder="john@example.com" required />
               </div>
               <div className="form-group">
                 <label className="form-label" htmlFor="focus">Project Focus</label>
-                <select className="form-select" id="focus">
+                <select className="form-select" id="focus" required>
                   <option value="">Select an option</option>
                   <option value="productivity">Personal Productivity</option>
                   <option value="business">Business Growth</option>
@@ -52,7 +58,7 @@ const ContactForm = () => {
               </div>
               <div className="form-group">
                 <label className="form-label" htmlFor="message">Message</label>
-                <textarea className="form-textarea" id="message" placeholder="How can we help you stay in flow?"></textarea>
+                <textarea className="form-textarea" id="message" placeholder="How can we help you stay in flow?" required></textarea>
               </div>
               <button className="btn-primary" type="submit">Send Message</button>
             </form>

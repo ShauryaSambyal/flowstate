@@ -13,6 +13,7 @@ const SmartGuidance = () => {
   // Autocomplete state
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredKeywords, setFilteredKeywords] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const dropdownRef = useRef(null);
 
   const keywords = [
@@ -21,6 +22,16 @@ const SmartGuidance = () => {
     "Exercise", "Meditation", "Morning Routine", "Sleep Optimization",
     "Breaking Procrastination", "Goal Setting", "Time Management"
   ];
+
+  const getIconForKey = (key) => {
+    const k = key.toLowerCase();
+    if (k.includes('study') || k.includes('learn')) return '📚';
+    if (k.includes('focus') || k.includes('work') || k.includes('hack')) return '⚡';
+    if (k.includes('exercise') || k.includes('meditation') || k.includes('health')) return '🧘';
+    if (k.includes('sleep')) return '🌙';
+    if (k.includes('goal') || k.includes('management')) return '🎯';
+    return '✨';
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,14 +53,36 @@ const SmartGuidance = () => {
       );
       setFilteredKeywords(filtered);
       setShowDropdown(filtered.length > 0);
+      setActiveIndex(0); // Reset to first item
     } else {
       setShowDropdown(false);
+      setActiveIndex(-1);
     }
   };
 
   const selectKeyword = (keyword) => {
     setPrompt(keyword);
     setShowDropdown(false);
+    setActiveIndex(-1);
+  };
+
+  const handleKeyDown = (e) => {
+    if (!showDropdown) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex(prev => (prev < filteredKeywords.length - 1 ? prev + 1 : prev));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex(prev => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault();
+      selectKeyword(filteredKeywords[activeIndex]);
+      // Explicitly trigger search if it was an Enter on a suggested item
+      setTimeout(() => fetchSuggestions(), 0);
+    } else if (e.key === 'Escape') {
+      setShowDropdown(false);
+    }
   };
 
   const fetchSuggestions = async () => {
@@ -60,6 +93,7 @@ const SmartGuidance = () => {
     setError(null);
     setGuidanceData(null);
     setShowDropdown(false);
+    setActiveIndex(-1);
     
     try {
       const response = await axios.post('http://localhost:8080/ai/suggestions', { prompt: finalPrompt });
@@ -87,10 +121,25 @@ const SmartGuidance = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
+        staggerChildren: 0.1,
+        // Reduced from 0.15 for snappier feel
       },
     },
+  };
+
+  const listVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      }
+    }
+  };
+
+  const listItemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { opacity: 1, x: 0 }
   };
 
   const roadmapItemVariants = {
@@ -145,7 +194,7 @@ const SmartGuidance = () => {
                 placeholder="e.g., Master React, Public Speaking, Fitness Goal..." 
                 value={prompt}
                 onChange={handleInputChange}
-                onKeyDown={(e) => e.key === 'Enter' && fetchSuggestions()}
+                onKeyDown={handleKeyDown}
                 disabled={loading}
                 autoFocus
               />
@@ -160,27 +209,38 @@ const SmartGuidance = () => {
                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
                      className="loader"
                    />
-                ) : 'Generate Roadmap'}
+                 ) : 'Generate Roadmap'}
               </button>
             </div>
 
             <AnimatePresence>
               {showDropdown && (
                 <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.98 }}
                   className="autocomplete-dropdown"
                 >
-                  {filteredKeywords.map((k, i) => (
-                    <div 
-                      key={i} 
-                      className="dropdown-item"
-                      onClick={() => selectKeyword(k)}
-                    >
-                      {k}
-                    </div>
-                  ))}
+                  <div className="dropdown-label">Suggested for you</div>
+                  <motion.div 
+                    variants={listVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="dropdown-list"
+                  >
+                    {filteredKeywords.map((k, i) => (
+                      <motion.div 
+                        key={i} 
+                        variants={listItemVariants}
+                        className={`dropdown-item ${i === activeIndex ? 'active' : ''}`}
+                        onClick={() => selectKeyword(k)}
+                        onMouseEnter={() => setActiveIndex(i)}
+                      >
+                        <span className="item-icon">{getIconForKey(k)}</span>
+                        <span className="item-text">{k}</span>
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>

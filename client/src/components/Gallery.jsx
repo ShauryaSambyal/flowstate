@@ -4,12 +4,12 @@ import './Gallery.css';
 
 const Gallery = () => {
   const items = [
-    { title: "Personal Life", tag: "Strategy", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800" },
-    { title: "Productivity", tag: "Action", image: "https://images.unsplash.com/photo-1554178286-db408551ba46?auto=format&fit=crop&q=80&w=800" },
-    { title: "Health & Fitness", tag: "Balance", image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800" },
-    { title: "Career Growth", tag: "Vision", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800" },
-    { title: "Financial Freedom", tag: "Security", image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800" },
-    { title: "Deep Work", tag: "Focus", image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=800" }
+    { title: "Personal Life", tag: "Strategy", image: "/Empty_chair_in_202603272305.jpeg" },
+    { title: "Productivity", tag: "Action", image: "/Deadlines_in_phone_202603272312.jpeg" },
+    { title: "Health & Fitness", tag: "Balance", image: "/Guided_action_feed_202603272321.jpeg" },
+    { title: "Career Growth", tag: "Vision", image: "/AI_named_FLOWSTATE_202603272251.jpeg" },
+    { title: "Financial Freedom", tag: "Security", image: "/create_a_screen_202603272250.png" },
+    { title: "Deep Work", tag: "Focus", image: "/download.png" }
   ];
 
   return (
