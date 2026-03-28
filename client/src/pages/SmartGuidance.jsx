@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './SmartGuidance.css';
 
+const STARS_KEY = 'flowstate_stars';
+
 const SmartGuidance = () => {
   const [prompt, setPrompt] = useState('');
   const [guidanceData, setGuidanceData] = useState(null);
@@ -15,6 +17,22 @@ const SmartGuidance = () => {
   const [filteredKeywords, setFilteredKeywords] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const dropdownRef = useRef(null);
+
+  // Stars state
+  const [stars, setStars] = useState(() => {
+    const saved = localStorage.getItem(STARS_KEY);
+    return saved ? parseInt(saved, 10) : 0;
+  });
+  const [showStarsDropdown, setShowStarsDropdown] = useState(false);
+  const starsRef = useRef(null);
+
+  // Image upload state
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [rewardAnimating, setRewardAnimating] = useState(false);
+  const [rewardMessage, setRewardMessage] = useState('');
+  const [alreadyRewarded, setAlreadyRewarded] = useState(false);
+  const fileInputRef = useRef(null);
 
   const keywords = [
     "Study HTML", "Study React", "Study JavaScript", "Study CSS", 
@@ -38,10 +56,18 @@ const SmartGuidance = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
+      if (starsRef.current && !starsRef.current.contains(event.target)) {
+        setShowStarsDropdown(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Persist stars to localStorage
+  useEffect(() => {
+    localStorage.setItem(STARS_KEY, stars.toString());
+  }, [stars]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -78,7 +104,6 @@ const SmartGuidance = () => {
     } else if (e.key === 'Enter' && activeIndex >= 0) {
       e.preventDefault();
       selectKeyword(filteredKeywords[activeIndex]);
-      // Explicitly trigger search if it was an Enter on a suggested item
       setTimeout(() => fetchSuggestions(), 0);
     } else if (e.key === 'Escape') {
       setShowDropdown(false);
@@ -99,7 +124,6 @@ const SmartGuidance = () => {
       const response = await axios.post('https://flowstate-tvmf.onrender.com/ai/suggestions', { prompt: finalPrompt });
       if (response.data.success) {
         setGuidanceData(response.data.data);
-        // Save to localStorage for Life Outcomes section
         localStorage.setItem('flowstate_life_outcomes', JSON.stringify({
           impact: response.data.data.impact,
           goal: finalPrompt,
@@ -116,13 +140,55 @@ const SmartGuidance = () => {
     }
   };
 
+  // Image upload handlers
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadedImage(file);
+    setAlreadyRewarded(false);
+    setRewardMessage('');
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    setUploadedImage(file);
+    setAlreadyRewarded(false);
+    setRewardMessage('');
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+
+  const handleClaimStars = () => {
+    if (alreadyRewarded || !uploadedImage) return;
+    setRewardAnimating(true);
+    setStars(prev => prev + 10);
+    setAlreadyRewarded(true);
+    setRewardMessage('+10 Stars Earned! 🎉');
+    setTimeout(() => setRewardAnimating(false), 1200);
+  };
+
+  const removeImage = () => {
+    setUploadedImage(null);
+    setImagePreview(null);
+    setAlreadyRewarded(false);
+    setRewardMessage('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        // Reduced from 0.15 for snappier feel
       },
     },
   };
@@ -160,8 +226,70 @@ const SmartGuidance = () => {
     }
   };
 
+  const progressPercent = Math.min((stars / 100) * 100, 100);
+
   return (
     <div className="smart-guidance-page">
+
+      {/* ── Stars Widget (top-right) ── */}
+      <div className="stars-widget" ref={starsRef}>
+        <button
+          className={`stars-btn ${rewardAnimating ? 'stars-burst' : ''}`}
+          onClick={() => setShowStarsDropdown(v => !v)}
+          aria-label="View stars"
+        >
+          <span className="stars-icon">⭐</span>
+          <span className="stars-count">{stars}</span>
+        </button>
+
+        <AnimatePresence>
+          {showStarsDropdown && (
+            <motion.div
+              className="stars-dropdown"
+              initial={{ opacity: 0, y: -8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.96 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="stars-dd-header">
+                <span className="stars-dd-title">Your Stars</span>
+                <span className="stars-dd-count">⭐ {stars}</span>
+              </div>
+
+              <div className="stars-progress-wrap">
+                <div className="stars-progress-bar">
+                  <motion.div
+                    className="stars-progress-fill"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progressPercent}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                  />
+                </div>
+                <div className="stars-progress-label">{stars} / 100</div>
+              </div>
+
+              <div className="stars-dd-msg">
+                {stars >= 100 ? (
+                  <span className="stars-badge-earned">🏆 Badge Unlocked! You&apos;re a Flow Master!</span>
+                ) : (
+                  <>
+                    <span className="stars-milestone-icon">🏅</span>
+                    <span>Reach <strong>100 stars</strong> to earn a badge that showcases your accomplishments!</span>
+                  </>
+                )}
+              </div>
+
+              {stars >= 100 && (
+                <div className="stars-badge-display">
+                  <div className="badge-icon">🏆</div>
+                  <div className="badge-label">Flow Master</div>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       <Link to="/" className="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="m15 18-6-6 6-6"/>
@@ -328,6 +456,85 @@ const SmartGuidance = () => {
             )}
           </AnimatePresence>
         </div>
+
+        {/* ── Photo Challenge Section ── */}
+        <motion.div
+          className="photo-challenge-section"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <div className="photo-challenge-header">
+            <span className="photo-challenge-tag">📸 Daily Challenge</span>
+            <h2 className="photo-challenge-title">Share Your Progress</h2>
+            <p className="photo-challenge-subtitle">
+              Upload a photo showing your work or progress today. Earn <strong>⭐ 10 stars</strong> instantly!
+            </p>
+          </div>
+
+          <div
+            className={`photo-drop-zone ${imagePreview ? 'has-image' : ''}`}
+            onClick={() => !imagePreview && fileInputRef.current?.click()}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+              id="photo-challenge-input"
+            />
+
+            {imagePreview ? (
+              <div className="photo-preview-wrap">
+                <img src={imagePreview} alt="Uploaded preview" className="photo-preview" />
+                <button className="photo-remove-btn" onClick={(e) => { e.stopPropagation(); removeImage(); }}>
+                  ✕ Remove
+                </button>
+              </div>
+            ) : (
+              <div className="photo-drop-content">
+                <div className="photo-drop-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                  </svg>
+                </div>
+                <p className="photo-drop-text">Drop your image here or <span className="photo-browse-link">browse</span></p>
+                <p className="photo-drop-hint">PNG, JPG, WEBP — any size</p>
+              </div>
+            )}
+          </div>
+
+          <AnimatePresence>
+            {uploadedImage && (
+              <motion.div
+                className="photo-claim-row"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+              >
+                {!alreadyRewarded ? (
+                  <button className="claim-stars-btn" onClick={handleClaimStars}>
+                    <span>⭐</span> Claim 10 Stars
+                  </button>
+                ) : (
+                  <motion.div
+                    className="reward-badge"
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                  >
+                    {rewardMessage}
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       <div className="bg-decorations">
