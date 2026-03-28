@@ -56,7 +56,6 @@ const BentoGrid = () => {
         </svg>
       ),
       size: "card-standard",
-      link: "Explore",
       path: "#"
     },
     {
