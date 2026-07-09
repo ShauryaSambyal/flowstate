@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import aiRoutes from "./routes/ai.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cookieParser());
 
 // Mount routes
 app.use("/ai", aiRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // Catch-all 404 handler (must be after routes)
 app.use((req, res) => {

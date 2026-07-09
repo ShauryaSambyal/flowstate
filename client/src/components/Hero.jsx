@@ -1,8 +1,36 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { signInWithGoogle } from '../../firebase.js';
+import { useNavigate } from 'react-router-dom';
+import { auth, signInWithGoogle } from '../../firebase.js';
+import { onAuthStateChanged } from 'firebase/auth';
 import './Hero.css';
 
 const Hero = () => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleAction = async () => {
+    if (user) {
+      navigate('/chat');
+    } else {
+      try {
+        const loggedInUser = await signInWithGoogle();
+        if (loggedInUser) {
+          navigate('/chat');
+        }
+      } catch (err) {
+        console.error("Hero action error:", err);
+      }
+    }
+  };
+
   const line1 = "Shape habits.";
   const line2 = "Predict outcomes.";
 
@@ -84,7 +112,9 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 1.8 }}
         >
-          <button className="btn-primary" onClick={signInWithGoogle}>Start free</button>
+          <button className="btn-primary" onClick={handleAction}>
+            {user ? 'Open AI Coach' : 'Start free'}
+          </button>
         </motion.div>
       </div>
     </section>

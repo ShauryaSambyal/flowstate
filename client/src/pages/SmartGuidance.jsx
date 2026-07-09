@@ -121,7 +121,8 @@ const SmartGuidance = () => {
     setActiveIndex(-1);
     
     try {
-      const response = await axios.post('https://flowstate-tvmf.onrender.com/ai/suggestions', { prompt: finalPrompt });
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://flowstate-tvmf.onrender.com';
+      const response = await axios.post(`${apiBaseUrl}/ai/suggestions`, { prompt: finalPrompt });
       if (response.data.success) {
         setGuidanceData(response.data.data);
         localStorage.setItem('flowstate_life_outcomes', JSON.stringify({
