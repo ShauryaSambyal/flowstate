@@ -39,7 +39,7 @@ const BenefitItem = ({ tag, title, description, image, index }) => {
 const Benefits = () => {
   const benefits = [
     {
-      tag: "Guided action feed",
+      tag: "Guided Action Feed",
       title: "Focus on what matters most.",
       description: "Our AI-powered feed filters out the noise and presents you with the most impactful actions you can take right now to stay on track.",
       image: "/Guided_action_feed_202603272321.jpeg"
