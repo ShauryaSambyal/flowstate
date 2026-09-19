@@ -1,0 +1,18 @@
+/* Additive styles for the extracted StarsWidget. The core widget look
+   (button, dropdown, progress, badge) continues to come from
+   SmartGuidance.css so PriorityInsights/Privacy reuse stays intact. */
+
+.stars-btn.is-disabled {
+  cursor: pointer;
+  opacity: 0.6;
+  color: var(--text-secondary);
+}
+
+.stars-btn.is-disabled:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.stars-count {
+  font-variant-numeric: tabular-nums;
+}

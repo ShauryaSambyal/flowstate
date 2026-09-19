@@ -1,5 +1,5 @@
 .gallery {
-  background-color: var(--bg-dark);
+  background-color: var(--alt-section-bg);
   color: var(--text-inverse);
   padding: var(--section-padding) 0;
   overflow: hidden;
@@ -23,11 +23,10 @@
 
 .gallery-item {
   position: relative;
-  border-radius: 1.5rem;
+  border-radius: var(--card-radius);
   overflow: hidden;
   aspect-ratio: 4/5;
-  background-color: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--media-bg);
   transition: transform 0.5s ease;
 }
 
@@ -63,10 +62,11 @@
 }
 
 .gallery-item-tag {
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
   text-transform: uppercase;
-  color: var(--text-inverse-secondary);
-  letter-spacing: 0.05em;
+  color: var(--alt-text-secondary);
+  letter-spacing: 0.18em;
 }
 
 @media (max-width: 1024px) {

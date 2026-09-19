@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { auth, signInWithGoogle } from '../../firebase.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import ThemeSwitcher from './ThemeSwitcher.jsx';
 import './Header.css';
 
 const Header = () => {
@@ -44,7 +45,7 @@ const Header = () => {
     try {
       const loggedInUser = await signInWithGoogle();
       if (loggedInUser) {
-        navigate('/chat');
+        navigate('/smart-guidance');
       }
     } catch (err) {
       console.error("Login Error:", err.message);
@@ -112,6 +113,7 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
+          <ThemeSwitcher />
           {user ? (
             <div className="profile-menu-container" ref={dropdownRef}>
               <button 
@@ -146,9 +148,9 @@ const Header = () => {
                       <li>
                         <button 
                           className="profile-dropdown-item-btn" 
-                          onClick={() => { setProfileDropdownOpen(false); navigate('/chat'); }}
+                          onClick={() => { setProfileDropdownOpen(false); navigate('/smart-guidance'); }}
                         >
-                          💬 AI Coach Chat
+                          💬 Open AI Coach
                         </button>
                       </li>
                       <li>
@@ -199,26 +201,13 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            style={{ 
-              position: 'absolute', 
-              top: '100%', 
-              left: 0, 
-              width: '100%', 
-              background: 'rgba(255, 255, 255, 0.96)',
-              backdropFilter: 'blur(20px)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-              overflow: 'hidden',
-              padding: '2rem',
-              zIndex: 999
-            }}
           >
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <ul className="mobile-menu-list">
               {navItems.map((item) => (
                 <li key={item.title}>
                   <a 
                     href={`#${item.title.toLowerCase()}`} 
-                    className="nav-link"
-                    style={{ fontSize: '1.25rem' }}
+                    className="nav-link mobile-nav-link"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.title}
@@ -231,7 +220,7 @@ const Header = () => {
                     className="btn-primary" 
                     style={{ width: '100%' }}
                     onClick={() => {
-                      navigate('/chat');
+                      navigate('/smart-guidance');
                       setMobileMenuOpen(false);
                     }}
                   >

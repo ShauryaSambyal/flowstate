@@ -1,0 +1,117 @@
+.theme-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mode-toggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--toggle-radius, 9999px);
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  transition: color 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+.mode-toggle:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--toggle-radius, 9999px);
+  transform: translateY(-1px);
+}
+
+.mode-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: var(--toggle-radius, 9999px);
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  transition: color 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+.theme-pick:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.theme-pick-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+}
+
+.theme-pick-caret {
+  transition: transform 0.2s ease;
+}
+
+.theme-pick-caret.open {
+  transform: rotate(180deg);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  background: var(--dropdown-bg);
+  border-radius: 14px;
+  box-shadow: var(--dropdown-shadow);
+  backdrop-filter: blur(var(--card-blur));
+  -webkit-backdrop-filter: blur(var(--card-blur));
+  padding: 0.4rem;
+  z-index: 1200;
+}
+
+.theme-menu-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.theme-menu-item:hover {
+  background: var(--accent-soft);
+}
+
+.theme-menu-item.active .theme-menu-name {
+  color: var(--accent);
+}
+
+.theme-menu-name {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--text-primary);
+}
+
+.theme-menu-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .theme-pick-label {
+    display: none;
+  }
+}

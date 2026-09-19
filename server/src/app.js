@@ -11,11 +11,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Mount routes
 app.use("/ai", aiRoutes);
 app.use("/api/v1/users", userRoutes);
 
-// Catch-all 404 handler (must be after routes)
 app.use((req, res) => {
     console.log(`404: ${req.method} ${req.url}`);
     res.status(404).json({ success: false, message: "API route not found." });

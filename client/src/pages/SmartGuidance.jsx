@@ -2,9 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { signInWithGoogle } from '../../firebase.js';
+import { useStars } from '../hooks/useStars.js';
+import StarsWidget from '../components/StarsWidget.jsx';
 import './SmartGuidance.css';
 
-const STARS_KEY = 'flowstate_stars';
+async function hashImage(dataUrl) {
+  try {
+    const encoded = new TextEncoder().encode(dataUrl);
+    const digest = await crypto.subtle.digest('SHA-256', encoded);
+    return Array.from(new Uint8Array(digest))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  } catch {
+    return `fallback-${dataUrl.length}-${dataUrl.slice(-32)}`;
+  }
+}
 
 const SmartGuidance = () => {
   const [prompt, setPrompt] = useState('');
@@ -18,20 +31,17 @@ const SmartGuidance = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const dropdownRef = useRef(null);
 
-  // Stars state
-  const [stars, setStars] = useState(() => {
-    const saved = localStorage.getItem(STARS_KEY);
-    return saved ? parseInt(saved, 10) : 0;
-  });
-  const [showStarsDropdown, setShowStarsDropdown] = useState(false);
-  const starsRef = useRef(null);
+  // Stars (account-bound, server is the source of truth)
+  const { stars, addStars, loading: starsLoading, isGuest } = useStars();
+  const [rewardAnimating, setRewardAnimating] = useState(false);
 
   // Image upload state
   const [uploadedImage, setUploadedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [rewardAnimating, setRewardAnimating] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [rewardMessage, setRewardMessage] = useState('');
   const [alreadyRewarded, setAlreadyRewarded] = useState(false);
+  const [claimError, setClaimError] = useState(null);
   const fileInputRef = useRef(null);
 
   const keywords = [
@@ -56,18 +66,10 @@ const SmartGuidance = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
-      if (starsRef.current && !starsRef.current.contains(event.target)) {
-        setShowStarsDropdown(false);
-      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  // Persist stars to localStorage
-  useEffect(() => {
-    localStorage.setItem(STARS_KEY, stars.toString());
-  }, [stars]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -148,6 +150,7 @@ const SmartGuidance = () => {
     setUploadedImage(file);
     setAlreadyRewarded(false);
     setRewardMessage('');
+    setClaimError(null);
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
@@ -160,6 +163,7 @@ const SmartGuidance = () => {
     setUploadedImage(file);
     setAlreadyRewarded(false);
     setRewardMessage('');
+    setClaimError(null);
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
@@ -167,13 +171,38 @@ const SmartGuidance = () => {
 
   const handleDragOver = (e) => e.preventDefault();
 
-  const handleClaimStars = () => {
-    if (alreadyRewarded || !uploadedImage) return;
-    setRewardAnimating(true);
-    setStars(prev => prev + 10);
-    setAlreadyRewarded(true);
-    setRewardMessage('+10 Stars Earned! 🎉');
-    setTimeout(() => setRewardAnimating(false), 1200);
+  const handleClaimStars = async () => {
+    if (alreadyRewarded || !uploadedImage || !imagePreview || uploading) return;
+
+    if (isGuest) {
+      setClaimError('Sign in to collect stars');
+      try {
+        await signInWithGoogle();
+      } catch {
+        /* Sign-in cancelled or failed; nothing is awarded. */
+      }
+      return;
+    }
+
+    setClaimError(null);
+    setUploading(true);
+
+    try {
+      const photoHash = await hashImage(imagePreview);
+      const result = await addStars(10, 'photo-challenge', photoHash);
+      setAlreadyRewarded(true);
+      if (result?.awarded > 0) {
+        setRewardAnimating(true);
+        setRewardMessage('+10 Stars Earned! ');
+        setTimeout(() => setRewardAnimating(false), 1200);
+      } else {
+        setRewardMessage(result?.message || 'Already claimed');
+      }
+    } catch (err) {
+      setClaimError(err.message || 'Could not claim stars. Please try again.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const removeImage = () => {
@@ -181,6 +210,7 @@ const SmartGuidance = () => {
     setImagePreview(null);
     setAlreadyRewarded(false);
     setRewardMessage('');
+    setClaimError(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -227,69 +257,25 @@ const SmartGuidance = () => {
     }
   };
 
-  const progressPercent = Math.min((stars / 100) * 100, 100);
+  const handleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+    } catch {
+      /* Sign-in cancelled or failed. */
+    }
+  };
 
   return (
     <div className="smart-guidance-page">
 
       {/* ── Stars Widget (top-right) ── */}
-      <div className="stars-widget" ref={starsRef}>
-        <button
-          className={`stars-btn ${rewardAnimating ? 'stars-burst' : ''}`}
-          onClick={() => setShowStarsDropdown(v => !v)}
-          aria-label="View stars"
-        >
-          <span className="stars-icon">⭐</span>
-          <span className="stars-count">{stars}</span>
-        </button>
-
-        <AnimatePresence>
-          {showStarsDropdown && (
-            <motion.div
-              className="stars-dropdown"
-              initial={{ opacity: 0, y: -8, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.96 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="stars-dd-header">
-                <span className="stars-dd-title">Your Stars</span>
-                <span className="stars-dd-count">⭐ {stars}</span>
-              </div>
-
-              <div className="stars-progress-wrap">
-                <div className="stars-progress-bar">
-                  <motion.div
-                    className="stars-progress-fill"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                  />
-                </div>
-                <div className="stars-progress-label">{stars} / 100</div>
-              </div>
-
-              <div className="stars-dd-msg">
-                {stars >= 100 ? (
-                  <span className="stars-badge-earned">🏆 Badge Unlocked! You&apos;re a Flow Master!</span>
-                ) : (
-                  <>
-                    <span className="stars-milestone-icon">🏅</span>
-                    <span>Reach <strong>100 stars</strong> to earn a badge that showcases your accomplishments!</span>
-                  </>
-                )}
-              </div>
-
-              {stars >= 100 && (
-                <div className="stars-badge-display">
-                  <div className="badge-icon">🏆</div>
-                  <div className="badge-label">Flow Master</div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <StarsWidget
+        stars={stars}
+        isGuest={isGuest}
+        loading={starsLoading}
+        burst={rewardAnimating}
+        onSignIn={handleSignIn}
+      />
 
       <Link to="/" className="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -519,8 +505,13 @@ const SmartGuidance = () => {
                 exit={{ opacity: 0, y: 10 }}
               >
                 {!alreadyRewarded ? (
-                  <button className="claim-stars-btn" onClick={handleClaimStars}>
-                    <span>⭐</span> Claim 10 Stars
+                  <button
+                    className="claim-stars-btn"
+                    onClick={handleClaimStars}
+                    disabled={uploading}
+                    title={isGuest ? 'Sign in to collect stars' : undefined}
+                  >
+                    <span>⭐</span> {uploading ? 'Claiming…' : isGuest ? 'Sign in to collect stars' : 'Claim 10 Stars'}
                   </button>
                 ) : (
                   <motion.div
@@ -535,6 +526,8 @@ const SmartGuidance = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {claimError && <p className="error-message" role="alert">{claimError}</p>}
         </motion.div>
       </div>
 

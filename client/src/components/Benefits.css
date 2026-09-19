@@ -19,9 +19,11 @@
 }
 
 .benefit-tag {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--link-color);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
@@ -39,12 +41,12 @@
 
 .benefit-image-container {
   flex: 1;
-  background-color: #000;
-  border-radius: 2rem;
+  background-color: var(--media-bg);
+  border-radius: var(--card-radius);
   aspect-ratio: 16/10;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--media-shadow);
 }
 
 .benefit-image-placeholder {

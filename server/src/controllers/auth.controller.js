@@ -1,5 +1,6 @@
 import { User } from "../models/users.model.js";
 import Groq from "groq-sdk";
+import { GROQ_MODEL } from "../config/ai.config.js";
 
 export const googleAuth = async (req, res) => {
     try {
@@ -106,11 +107,11 @@ export const handleUserChat = async (req, res) => {
             ...formattedHistory
         ];
 
-        console.log(`Calling Groq API (llama-3.1-8b-instant) for chat from user: ${email}`);
+        console.log(`Calling Groq API (${GROQ_MODEL}) for chat from user: ${email}`);
 
         const completion = await groq.chat.completions.create({
             messages,
-            model: "llama-3.1-8b-instant",
+            model: GROQ_MODEL,
             temperature: 0.7,
             max_tokens: 800,
         });
@@ -133,11 +134,29 @@ export const handleUserChat = async (req, res) => {
             chatHistory: user.chatHistory
         });
     } catch (error) {
+        const providerCode = error?.code || error?.error?.code || error?.error?.error?.code;
+        const providerStatus = error?.status;
+
+        if (providerCode === "model_not_found") {
+            console.error("Groq model error:", error?.error?.error?.message || error?.error?.message || error.message);
+            return res.status(500).json({
+                success: false,
+                error: "AI model unavailable. Check GROQ_MODEL / your Groq model list."
+            });
+        }
+
+        if (providerStatus === 401 || providerStatus === 403) {
+            console.error("Groq auth error:", error?.error?.error?.message || error?.error?.message || error.message);
+            return res.status(500).json({
+                success: false,
+                error: "AI provider authentication failed. Check GROQ_API_KEY."
+            });
+        }
+
         console.error("Chat Handler Error:", error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
-            message: "Internal server error during chat processing.",
-            error: error.message
+            error: "AI request failed."
         });
     }
 };

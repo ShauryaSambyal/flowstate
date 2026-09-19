@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+import { GROQ_MODEL } from "../config/ai.config.js";
 
 export const getAiSuggestions = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ export const getAiSuggestions = async (req, res) => {
             apiKey: process.env.GROQ_API_KEY,
         });
 
-        console.log(`Calling Groq API (llama3-70b-8192) for Roadmap: ${prompt}`);
+        console.log(`Calling Groq API (${GROQ_MODEL}) for Roadmap: ${prompt}`);
 
         const completion = await groq.chat.completions.create({
             messages: [
@@ -41,7 +42,7 @@ export const getAiSuggestions = async (req, res) => {
                     content: `Create a roadmap and future impact for: "${prompt}"`
                 }
             ],
-            model: "llama-3.1-8b-instant",
+            model: GROQ_MODEL,
             temperature: 0.6,
             max_tokens: 1000,
             response_format: { type: "json_object" }
@@ -58,11 +59,29 @@ export const getAiSuggestions = async (req, res) => {
         });
 
     } catch (error) {
+        const providerCode = error?.code || error?.error?.code || error?.error?.error?.code;
+        const providerStatus = error?.status;
+
+        if (providerCode === "model_not_found") {
+            console.error("Groq model error:", error?.error?.error?.message || error?.error?.message || error.message);
+            return res.status(500).json({
+                success: false,
+                error: "AI model unavailable. Check GROQ_MODEL / your Groq model list."
+            });
+        }
+
+        if (providerStatus === 401 || providerStatus === 403) {
+            console.error("Groq auth error:", error?.error?.error?.message || error?.error?.message || error.message);
+            return res.status(500).json({
+                success: false,
+                error: "AI provider authentication failed. Check GROQ_API_KEY."
+            });
+        }
+
         console.error("Groq Error:", error.message);
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to generate AI roadmap",
-            error: error.message
+        return res.status(500).json({
+            success: false,
+            error: "AI request failed."
         });
     }
 };

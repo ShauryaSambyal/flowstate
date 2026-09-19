@@ -1,5 +1,5 @@
 .stats {
-  background-color: var(--bg-dark);
+  background-color: var(--alt-section-bg);
   color: var(--text-inverse);
   padding: 6rem 0;
 }
@@ -14,17 +14,16 @@
 .stat-item {
   flex: 1;
   min-width: 300px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2rem;
+  background-color: var(--alt-card-bg);
+  border-radius: var(--card-radius);
   padding: 4rem 2rem;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.35s ease;
 }
 
 .stat-item:hover {
   transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.09);
 }
 
 .stat-value {
@@ -37,7 +36,7 @@
 
 .stat-label {
   font-size: 1.125rem;
-  color: var(--text-inverse-secondary);
+  color: var(--alt-text-secondary);
 }
 
 @media (max-width: 768px) {

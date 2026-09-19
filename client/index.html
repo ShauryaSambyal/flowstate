@@ -6,9 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FLOWSTATE | Shape Habits and Predict Outcomes</title>
     <meta name="description" content="Experience a new way to manage your tasks with FLOWSTATE." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Prevent flash of wrong theme: apply persisted mode/theme before paint -->
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem('flowstate.mode');
+          if (mode !== 'light' && mode !== 'dark') {
+            mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          var theme = localStorage.getItem('flowstate.theme');
+          if (theme !== 'glass' && theme !== 'neo' && theme !== 'mono') theme = 'glass';
+          document.documentElement.setAttribute('data-mode', mode);
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.style.colorScheme = mode;
+        } catch (e) {
+          document.documentElement.setAttribute('data-mode', 'light');
+          document.documentElement.setAttribute('data-theme', 'glass');
+        }
+      })();
+    </script>
+
+    <link rel="preload" href="/fonts/NType82-Headline.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Bitcount+Single:wght@100..900&family=Fontdiner+Swanky&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

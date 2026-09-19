@@ -10,9 +10,9 @@
 
 .bento-tag {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-secondary);
   margin-bottom: 1rem;
@@ -32,49 +32,33 @@
 }
 
 .bento-card {
-  background-color: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-card);
+  background-color: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  -webkit-backdrop-filter: blur(var(--card-blur));
+  border-radius: var(--card-radius);
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, background-color 0.35s ease;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: var(--card-shadow);
 }
 
 .bento-card:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* Category Specific Colors */
-.bento-card.next-action { 
-  --card-accent: #059669; /* Emerald */
-  background: linear-gradient(135deg, var(--bg-card) 0%, #f0fdf4 100%);
-}
-.bento-card.smart-guidance { 
-  --card-accent: #4f46e5; /* Indigo */
-  background: linear-gradient(135deg, var(--bg-card) 0%, #eef2ff 100%);
-}
-.bento-card.life-outcomes { 
-  --card-accent: #d97706; /* Amber */
-  background: linear-gradient(135deg, var(--bg-card) 0%, #fffbeb 100%);
-}
-.bento-card.priority-insights { 
-  --card-accent: #e11d48; /* Rose */
-  background: linear-gradient(135deg, var(--bg-card) 0%, #fff1f2 100%);
-}
-.bento-card.data-privacy { 
-  --card-accent: #4b5563; /* Gray */
-  background: linear-gradient(135deg, var(--bg-card) 0%, #f9fafb 100%);
-}
+/* Category accents — tint adapts to mode via color-mix */
+.bento-card.next-action { --card-accent: #059669; }
+.bento-card.smart-guidance { --card-accent: #4F46E5; }
+.bento-card.life-outcomes { --card-accent: #D97706; }
+.bento-card.priority-insights { --card-accent: #E11D48; }
+.bento-card.data-privacy { --card-accent: #64748B; }
 
-.bento-card:hover {
-  border-color: var(--card-accent);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 0 20px 0 var(--card-accent);
+.bento-card {
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--card-accent) 9%, var(--card-bg)) 0%, var(--card-bg) 100%);
 }
 
 .bento-inner {
@@ -86,7 +70,7 @@
 .bento-icon {
   width: 48px;
   height: 48px;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--icon-bg);
   border-radius: 0.75rem;
   display: flex;
   align-items: center;

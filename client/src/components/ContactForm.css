@@ -1,7 +1,7 @@
 .contact {
   background-color: var(--bg-primary);
   padding: var(--section-padding) 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid var(--hairline);
 }
 
 .contact-grid {
@@ -24,13 +24,13 @@
 }
 
 .contact-form-container {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  -webkit-backdrop-filter: blur(var(--card-blur));
   padding: 3rem;
-  border-radius: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .form-group {
@@ -48,17 +48,23 @@
 .form-input, .form-textarea, .form-select {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--input-bg);
+  border: none;
+  box-shadow: var(--input-shadow);
   border-radius: 1rem;
   font-family: inherit;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-primary);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   outline: none;
-  border-color: var(--link-color);
-  box-shadow: 0 0 0 4px rgba(56, 152, 236, 0.1);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: var(--text-secondary);
 }
 
 .form-textarea {

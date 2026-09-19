@@ -19,7 +19,7 @@
 }
 
 .faq-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
 }
