@@ -75,7 +75,7 @@ Surfaces resolve from CSS custom properties set on `:root` and re-declared per
 | `--bg`              | `#EDF3FB`                    | `#E7EBF2`                       | `#F4F4F2`          |
 | `--text-primary`    | `#0F172A`                    | `#1E2933`                       | `#0A0A0A`          |
 | `--accent`          | `#2563EB`                    | `#2563EB`                       | `#0A0A0A`          |
-| `--card-bg`         | `rgba(0,0,0,0.04)`           | `rgba(0,0,0,0.04)`              | `rgba(0,0,0,0.04)`     |
+| `--card-bg`         | `rgba(0,0,0,0.05)`           | `rgba(0,0,0,0.05)`              | `rgba(0,0,0,0.05)`     |
 | `--card-shadow`     | `0 1px 2px` soft             | `0 1px 2px` soft                | `none` (flat)          |
 | `--dot-color`       | `rgba(15,23,42,0.24)`        | `rgba(30,41,51,0.20)`           | `rgba(10,10,10,0.28)` |
 
@@ -86,7 +86,7 @@ Surfaces resolve from CSS custom properties set on `:root` and re-declared per
 | `--bg`              | `#06080D`                    | `#181B21`                       | `#000000`          |
 | `--text-primary`    | `#F1F5F9`                    | `#E7EBF2`                       | `#F5F5F5`          |
 | `--accent`          | `#60A5FA`                    | `#60A5FA`                       | `#F5F5F5`          |
-| `--card-bg`         | `rgba(255,255,255,0.045)`    | `rgba(255,255,255,0.045)`       | `rgba(255,255,255,0.045)` |
+| `--card-bg`         | `rgba(255,255,255,0.055)`    | `rgba(255,255,255,0.05)`        | `rgba(255,255,255,0.065)` |
 | `--card-shadow`     | `0 1px 2px` soft             | `0 1px 2px` soft                | `none` (flat)          |
 | `--dot-color`       | `rgba(255,255,255,0.10)`     | `rgba(148,163,184,0.08)`        | `rgba(255,255,255,0.16)` |
 
