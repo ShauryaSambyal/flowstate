@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { api, formatApiError } from '../api/client.js';
 import './SmartGuidance.css'; // Reusing the same beautiful styles
 
 const PriorityInsights = () => {
@@ -14,9 +14,8 @@ const PriorityInsights = () => {
     const fetchPriorityRoadmap = async () => {
       try {
         setLoading(true);
-        const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://flowstate-tvmf.onrender.com';
-        const response = await axios.post(`${apiBaseUrl}/ai/suggestions`, { 
-            prompt: "how to effectively spend your day for maximum productivity" 
+        const response = await api.post('/ai/suggestions', {
+            prompt: "how to effectively spend your day for maximum productivity"
         });
         
         if (response.data.success) {
@@ -32,7 +31,7 @@ const PriorityInsights = () => {
         }
       } catch (err) {
         console.error("Axios Error:", err.response?.data || err.message);
-        setError(`Error: ${err.response?.data?.error || err.message || 'Connection failed'}`);
+        setError(formatApiError(err));
       } finally {
         setLoading(false);
       }

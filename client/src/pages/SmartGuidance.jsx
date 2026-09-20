@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { api, formatApiError } from '../api/client.js';
 import { signInWithGoogle } from '../../firebase.js';
 import { useStars } from '../hooks/useStars.js';
 import StarsWidget from '../components/StarsWidget.jsx';
@@ -123,8 +123,7 @@ const SmartGuidance = () => {
     setActiveIndex(-1);
     
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://flowstate-tvmf.onrender.com';
-      const response = await axios.post(`${apiBaseUrl}/ai/suggestions`, { prompt: finalPrompt });
+      const response = await api.post('/ai/suggestions', { prompt: finalPrompt });
       if (response.data.success) {
         setGuidanceData(response.data.data);
         localStorage.setItem('flowstate_life_outcomes', JSON.stringify({
@@ -137,7 +136,7 @@ const SmartGuidance = () => {
       }
     } catch (err) {
       console.error("Axios Error:", err.response?.data || err.message);
-      setError(`Error: ${err.response?.data?.error || err.message || 'Connection failed'}`);
+      setError(formatApiError(err));
     } finally {
       setLoading(false);
     }

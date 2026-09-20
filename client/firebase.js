@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { apiUrl } from "./src/api/client.js";
 
 // Your Firebase config
 const firebaseConfig = {
@@ -25,10 +26,8 @@ const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://flowstate-tvmf.onrender.com';
-    
     // Sync with MongoDB backend
-    const response = await fetch(`${apiBaseUrl}/api/v1/users/google-auth`, {
+    const response = await fetch(apiUrl('/api/v1/users/google-auth'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase.js';
+import { apiUrl } from '../api/client.js';
 
 const LEGACY_STARS_KEY = 'flowstate_stars';
 const MAX_MIGRATION = 1000;
-const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://flowstate-tvmf.onrender.com';
 
 async function request(path, options) {
-  const response = await fetch(`${apiBaseUrl}${path}`, {
+  const response = await fetch(apiUrl(path), {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   });

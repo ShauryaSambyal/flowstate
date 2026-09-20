@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local environment files — committing these bakes dev values (e.g. a localhost
+# API URL) into production builds.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
