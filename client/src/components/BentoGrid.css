@@ -127,8 +127,27 @@
 @media (max-width: 640px) {
   .bento-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   .bento-title {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+  }
+  .bento-card {
+    padding: 1.75rem;
+  }
+  .bento-icon {
+    margin-bottom: 1.25rem;
+  }
+  .card-description {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .bento-card {
+    padding: 1.35rem;
+  }
+  .card-title {
+    font-size: 1.3rem;
   }
 }

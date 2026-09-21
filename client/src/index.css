@@ -387,6 +387,8 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.02em;
+  /* Long display words never push a phone layout sideways. */
+  overflow-wrap: break-word;
 }
 
 a {
@@ -483,6 +485,19 @@ img {
   background: var(--accent-soft);
   color: var(--accent);
   transform: translateY(-2px);
+}
+
+/* ---------- Small screens ----------
+   One place for the two values every section shares, so phones (and folded
+   screens down to ~280px) keep their margins and rhythm. */
+@media (max-width: 520px) {
+  :root {
+    --section-padding: 4.5rem;
+  }
+
+  .container {
+    padding: 0 1.25rem;
+  }
 }
 
 /* ---------- Motion preferences ---------- */

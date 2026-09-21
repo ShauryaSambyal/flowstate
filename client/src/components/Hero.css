@@ -50,6 +50,7 @@
   letter-spacing: -0.03em;
   color: var(--text-primary);
   margin-bottom: 2.25rem;
+  overflow-wrap: break-word;
 }
 
 .hero-line {
@@ -62,10 +63,12 @@
   position: relative;
   display: inline-block;
   font-family: var(--font-accent);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.02em;
   font-style: normal;
-  margin-right: 0.28em;
+  /* The literal space after this span keeps the accessible text readable;
+     this only widens the visual gap between the two words. */
+  margin-right: 0.15em;
 }
 
 .hero-accent-underline {
@@ -138,5 +141,31 @@
   }
   .hero-subtitle {
     font-size: 1rem;
+  }
+}
+
+/* Small phones (and folded screens): the headline still has to fit the width. */
+@media (max-width: 480px) {
+  .hero {
+    min-height: 92vh;
+    padding: 6.5rem 0 5rem;
+  }
+  .hero-title {
+    font-size: clamp(2.1rem, 10.5vw, 2.75rem);
+    margin-bottom: 1.5rem;
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 2.25rem;
+  }
+  .hero-actions {
+    gap: 0.65rem;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-ghost {
+    flex: 1 1 auto;
+  }
+  .hero-scroll {
+    bottom: 1.5rem;
   }
 }

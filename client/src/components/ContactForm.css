@@ -86,10 +86,25 @@
 }
 
 @media (max-width: 640px) {
+  .contact-grid {
+    gap: 2.5rem;
+  }
   .contact-form-container {
     padding: 1.5rem;
   }
+  /* Scales with the viewport so the longest word cannot overflow the screen. */
   .contact-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 9vw, 2.5rem);
+  }
+}
+
+@media (max-width: 400px) {
+  .contact-form-container {
+    padding: 1.15rem;
+  }
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 0.85rem 1rem;
   }
 }

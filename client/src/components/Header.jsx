@@ -85,7 +85,7 @@ const Header = () => {
         </motion.div>
 
         <nav className="nav">
-          <ul className="nav-list" style={{ display: 'flex', gap: '2rem' }}>
+          <ul className="nav-list">
             {navItems.map((item, index) => (
               <motion.li 
                 key={item.title} 

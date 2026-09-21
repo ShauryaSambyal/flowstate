@@ -166,9 +166,19 @@
 @media (max-width: 640px) {
   .gallery-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .gallery-header {
     margin-bottom: 3rem;
+  }
+
+  .gallery-item-content {
+    padding: 1.5rem;
+  }
+
+  .gallery-item-cta {
+    top: 1rem;
+    right: 1rem;
   }
 }

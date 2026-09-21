@@ -713,6 +713,10 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
+  .smart-guidance-page {
+    padding: 104px 1.5rem 4.5rem;
+  }
+
   .back-link {
     top: 20px;
     left: 20px;
@@ -746,13 +750,91 @@
   }
 
   .stars-dropdown {
-    width: 260px;
+    width: min(260px, calc(100vw - 36px));
     right: -10px;
   }
 
   .photo-drop-zone {
     padding: 2.5rem 1.5rem;
     border-radius: 1.25rem;
+  }
+
+  .guidance-container {
+    gap: 2.5rem;
+  }
+
+  .roadmap-step {
+    gap: 1.25rem;
+  }
+
+  .step-content {
+    padding-bottom: 2rem;
+  }
+
+  .step-content p {
+    font-size: 1rem;
+  }
+
+  .impact-card {
+    padding: 1.5rem;
+  }
+
+  .photo-challenge-section {
+    margin-top: 3.5rem;
+  }
+}
+
+/* Small phones and folded screens — margins, type and every control keep
+   fitting without sideways scrolling. */
+@media (max-width: 480px) {
+  .smart-guidance-page {
+    padding: 92px 1.15rem 3.5rem;
+  }
+
+  .page-title {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .input-wrapper {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .input-wrapper input {
+    padding: 0 0.6rem;
+    font-size: 1rem;
+  }
+
+  .dropdown-item {
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .item-text {
+    font-size: 0.95rem;
+  }
+
+  .stars-btn {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.875rem;
+  }
+
+  .stars-badge-display {
+    gap: 0.5rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .badge-icon {
+    font-size: 1.5rem;
+  }
+
+  .skeleton-label {
+    width: 110px;
   }
 }
 
