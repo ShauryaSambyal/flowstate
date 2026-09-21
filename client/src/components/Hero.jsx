@@ -34,10 +34,19 @@ const Hero = () => {
     }
   };
 
-  /* The same entrance the rest of the page uses for its sections — fade in
-     with a short upward rise over 0.6s, staggered by 0.1s (see BentoGrid, FAQ
-     and the Gallery cards), just run immediately since the hero is already in
-     view. Skipped entirely when the visitor prefers reduced motion. */
+  /* The site has one entrance: headings fade up from 95% scale, body copy and
+     controls rise 20px — both over 0.6s, staggered by 0.1s (Gallery, BentoGrid,
+     FAQ, ContactForm all match). The hero only differs by running immediately,
+     because it is already in view. Skipped under prefers-reduced-motion. */
+  const revealHeading = (delay = 0) =>
+    reduceMotion
+      ? { initial: false, animate: { opacity: 1 } }
+      : {
+          initial: { opacity: 0, scale: 0.95 },
+          animate: { opacity: 1, scale: 1 },
+          transition: { duration: 0.6, delay },
+        };
+
   const reveal = (delay = 0) =>
     reduceMotion
       ? { initial: false, animate: { opacity: 1 } }
@@ -60,7 +69,7 @@ const Hero = () => {
       <span className="hero-crosshair br" aria-hidden="true">+</span>
 
       <div className="container hero-container">
-        <motion.h1 className="hero-title" {...reveal(0)}>
+        <motion.h1 className="hero-title" {...revealHeading(0)}>
           <span className="hero-line">{LINE_1}</span>
           <span className="hero-line">
             <span className="hero-accent">
