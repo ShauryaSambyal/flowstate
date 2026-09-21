@@ -21,17 +21,32 @@
   gap: 2rem;
 }
 
+/* Each card is a real button: it opens the workflow experience in place. */
 .gallery-item {
   position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
   border-radius: var(--card-radius);
   overflow: hidden;
   aspect-ratio: 4/5;
   background-color: var(--media-bg);
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 
-.gallery-item:hover {
+.gallery-item:hover,
+.gallery-item:focus-visible {
   transform: translateY(-10px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.gallery-item:focus-visible {
+  border-radius: var(--card-radius);
+  outline-offset: 4px;
 }
 
 .gallery-item-image {
@@ -39,10 +54,27 @@
   height: 100%;
   object-fit: cover;
   opacity: 0.6;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.gallery-item:hover .gallery-item-image,
+.gallery-item:focus-visible .gallery-item-image {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* Keeps the copy legible while the CTA is showing. */
+.gallery-item-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.12) 60%, transparent);
+  opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.gallery-item:hover .gallery-item-image {
+.gallery-item:hover .gallery-item-veil,
+.gallery-item:focus-visible .gallery-item-veil {
   opacity: 1;
 }
 
@@ -52,21 +84,77 @@
   left: 0;
   width: 100%;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
 }
 
 .gallery-item-title {
+  display: block;
   font-size: 1.25rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
+  line-height: 1.25;
 }
 
 .gallery-item-tag {
+  display: block;
   font-family: var(--font-mono);
   font-size: 0.65rem;
   text-transform: uppercase;
   color: var(--alt-text-secondary);
   letter-spacing: 0.18em;
+}
+
+/* Quiet, instrument-like affordance rather than a loud button. */
+.gallery-item-cta {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(10, 14, 22, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-inverse);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.gallery-item:hover .gallery-item-cta,
+.gallery-item:focus-visible .gallery-item-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-item-cta-arrow {
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-cta-arrow {
+  transform: translateX(3px);
+}
+
+/* Touch devices never hover — keep the affordance visible. */
+@media (hover: none) {
+  .gallery-item-cta {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gallery-item-veil {
+    opacity: 0.7;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -78,5 +166,9 @@
 @media (max-width: 640px) {
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-header {
+    margin-bottom: 3rem;
   }
 }
