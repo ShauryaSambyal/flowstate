@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { ThemeContext, THEMES } from './context.js';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ThemeContext } from './context.js';
 
-const DEFAULT_THEME = 'glass';
 const MODE_KEY = 'flowstate.mode';
-const THEME_KEY = 'flowstate.theme';
+
+/* Mono is the one theme the site ships. Glass and neo were removed along with
+   the switcher, but the [data-theme] token blocks stay in index.css so a future
+   theme can be reintroduced without touching component code. */
+const THEME = 'mono';
 
 function getInitialMode() {
   try {
@@ -15,32 +18,20 @@ function getInitialMode() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function getInitialTheme() {
-  try {
-    const stored = localStorage.getItem(THEME_KEY);
-    if (THEMES.includes(stored)) return stored;
-  } catch {
-    /* localStorage unavailable */
-  }
-  return DEFAULT_THEME;
-}
-
 export function ThemeProvider({ children }) {
   const [mode, setMode] = useState(getInitialMode);
-  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-mode', mode);
-    root.setAttribute('data-theme', theme);
+    root.setAttribute('data-theme', THEME);
     root.style.colorScheme = mode;
     try {
       localStorage.setItem(MODE_KEY, mode);
-      localStorage.setItem(THEME_KEY, theme);
     } catch {
       /* ignore */
     }
-  }, [mode, theme]);
+  }, [mode]);
 
   // Follow OS changes until the user makes an explicit choice.
   useEffect(() => {
@@ -61,7 +52,7 @@ export function ThemeProvider({ children }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ mode, theme, setMode, toggleMode, setTheme, themes: THEMES }}>
+    <ThemeContext.Provider value={{ mode, theme: THEME, setMode, toggleMode }}>
       {children}
     </ThemeContext.Provider>
   );

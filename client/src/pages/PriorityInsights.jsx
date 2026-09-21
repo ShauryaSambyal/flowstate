@@ -20,12 +20,8 @@ const PriorityInsights = () => {
         
         if (response.data.success) {
           setGuidanceData(response.data.data);
-          // Save to localStorage for Life Outcomes section
-          localStorage.setItem('flowstate_life_outcomes', JSON.stringify({
-            impact: response.data.data.impact,
-            goal: "Optimal Productivity Schedule",
-            timestamp: new Date().toISOString()
-          }));
+          // Not written to roadmap history: this roadmap is generated on mount
+          // from a fixed prompt rather than entered by the user.
         } else {
           setError('Failed to generate insights. Please try again.');
         }

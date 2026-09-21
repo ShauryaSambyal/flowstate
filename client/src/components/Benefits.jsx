@@ -1,16 +1,44 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import './Benefits.css';
+
+/* Side-by-side rows slide in from the side; stacked rows rise instead. A
+   sideways offset on a stacked row pushes it past the viewport edge, which is
+   the horizontal scroll this layout used to cause on phones. */
+const useSideBySide = () => {
+  const query = '(min-width: 769px)';
+  const [wide, setWide] = useState(() =>
+    typeof window === 'undefined' ? true : window.matchMedia(query).matches
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const onChange = (event) => setWide(event.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+
+  return wide;
+};
 
 const BenefitItem = ({ tag, title, description, image, index }) => {
   const isEven = index % 2 === 0;
+  const sideBySide = useSideBySide();
+
+  const contentInitial = sideBySide
+    ? { opacity: 0, x: isEven ? -50 : 50 }
+    : { opacity: 0, y: 20 };
+
+  const imageInitial = sideBySide
+    ? { opacity: 0, scale: 0.9, x: isEven ? 50 : -50 }
+    : { opacity: 0, scale: 0.98, y: 20 };
 
   return (
     <div className="benefit-item">
       <motion.div 
         className="benefit-content"
-        initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={contentInitial}
+        whileInView={{ opacity: 1, x: 0, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
@@ -21,8 +49,8 @@ const BenefitItem = ({ tag, title, description, image, index }) => {
 
       <motion.div 
         className="benefit-image-container"
-        initial={{ opacity: 0, scale: 0.9, x: isEven ? 50 : -50 }}
-        whileInView={{ opacity: 1, scale: 1, x: 0 }}
+        initial={imageInitial}
+        whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >

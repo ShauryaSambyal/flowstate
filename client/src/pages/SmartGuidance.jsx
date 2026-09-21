@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { api, formatApiError } from '../api/client.js';
 import { signInWithGoogle } from '../../firebase.js';
 import { useStars } from '../hooks/useStars.js';
+import { useRoadmapHistory } from '../hooks/useRoadmapHistory.js';
 import StarsWidget from '../components/StarsWidget.jsx';
 import './SmartGuidance.css';
 
@@ -33,6 +34,9 @@ const SmartGuidance = () => {
 
   // Stars (account-bound, server is the source of truth)
   const { stars, addStars, loading: starsLoading, isGuest } = useStars();
+
+  // Every generated roadmap is kept for this account (see the History page).
+  const { record: recordRoadmap } = useRoadmapHistory();
   const [rewardAnimating, setRewardAnimating] = useState(false);
 
   // Image upload state
@@ -126,11 +130,11 @@ const SmartGuidance = () => {
       const response = await api.post('/ai/suggestions', { prompt: finalPrompt });
       if (response.data.success) {
         setGuidanceData(response.data.data);
-        localStorage.setItem('flowstate_life_outcomes', JSON.stringify({
-          impact: response.data.data.impact,
+        recordRoadmap({
           goal: finalPrompt,
-          timestamp: new Date().toISOString()
-        }));
+          roadmap: response.data.data.roadmap,
+          impact: response.data.data.impact,
+        });
       } else {
         setError('Failed to get guidance. Please try again.');
       }

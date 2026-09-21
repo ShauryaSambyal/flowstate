@@ -15,8 +15,8 @@ const FOCUSABLE =
 
 /* The panel is a full-screen dark surface in every mode/theme, so it reads as
    the same premium block as the Workflow Gallery it opens from. */
-const WorkflowModal = ({ workflowId, onClose }) => {
-  const session = useWorkflowSession(workflowId);
+const WorkflowModal = ({ workflowId, onClose, autoResume = false }) => {
+  const session = useWorkflowSession(workflowId, { autoResume });
   const panelRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { workflow, stage, busy, canContinue } = session;

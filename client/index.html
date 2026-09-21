@@ -15,14 +15,14 @@
           if (mode !== 'light' && mode !== 'dark') {
             mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
-          var theme = localStorage.getItem('flowstate.theme');
-          if (theme !== 'glass' && theme !== 'neo' && theme !== 'mono') theme = 'glass';
           document.documentElement.setAttribute('data-mode', mode);
-          document.documentElement.setAttribute('data-theme', theme);
+          // Mono is the single shipped theme — the switcher is gone, so this is
+          // no longer read from storage.
+          document.documentElement.setAttribute('data-theme', 'mono');
           document.documentElement.style.colorScheme = mode;
         } catch (e) {
           document.documentElement.setAttribute('data-mode', 'light');
-          document.documentElement.setAttribute('data-theme', 'glass');
+          document.documentElement.setAttribute('data-theme', 'mono');
         }
       })();
     </script>
@@ -30,7 +30,7 @@
     <link rel="preload" href="/fonts/NType82-Headline.otf" as="font" type="font/otf" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Bitcount+Single:wght@100..900&family=Fontdiner+Swanky&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@10..48,200..800&family=Bitcount+Single:wght@100..900&family=Fontdiner+Swanky&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

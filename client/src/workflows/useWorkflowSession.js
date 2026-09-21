@@ -82,7 +82,7 @@ function newRunId(workflowId) {
   return `${workflowId}-${Date.now().toString(36)}`;
 }
 
-export function useWorkflowSession(workflowId) {
+export function useWorkflowSession(workflowId, { autoResume = false } = {}) {
   const workflow = useMemo(() => getWorkflow(workflowId), [workflowId]);
 
   const [stage, setStage] = useState(STAGES.INTRO);
@@ -330,6 +330,18 @@ export function useWorkflowSession(workflowId) {
     },
     [workflow]
   );
+
+  /* Coming from the History page: pick the stored run up immediately instead of
+     asking the visitor to press Resume on the intro. */
+  const autoResumedRef = useRef(false);
+  useEffect(() => {
+    if (!autoResume || autoResumedRef.current) return;
+    if (plan || stage !== STAGES.INTRO) return;
+    const stored = store.runs.find((item) => item.workflowId === workflow?.id);
+    if (!stored) return;
+    autoResumedRef.current = true;
+    resumeStoredRun(stored);
+  }, [autoResume, plan, stage, store.runs, workflow, resumeStoredRun]);
 
   const resumeDraft = useCallback(
     (draft) => {
